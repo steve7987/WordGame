@@ -1,7 +1,7 @@
 import { TILE_BAG, createTile, GRID_SIZE } from './data.js';
 import { renderGrid, renderInputRack, initGrid } from './ui.js';
 import { setupInputHandlers } from './input.js';
-import InputRule from './inputRule.js';
+import InputRule from './InputRule.js';
 import { loadWords } from './wordLoader.js';
 
 

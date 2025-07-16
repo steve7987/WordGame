@@ -47,7 +47,7 @@ export default class InputRule {
     }
 	
 	for (let i = 7; i < this.maxLength; i++) {
-        const av = Math.round(level / 6 * i + i + this._randomInt(2, 6));
+        const av = Math.round(level / 8 * i + i + this._randomInt(2, 6));
 		this.scoreModifiers[i] = { type: 'add', value: av };
     }
   }

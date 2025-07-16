@@ -3,7 +3,7 @@ import { TILE_BAG } from './data.js';
 export default class InputRule {
   constructor(level = 1) {
     this.maxLength = 14;
-
+ 
     // Pick a fixed letter in one of the first 4 slots using TILE_BAG weights
     this.fixedLetters = {};
     let fixedPos = this._randomInt(0, 3);
