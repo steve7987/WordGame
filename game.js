@@ -26,7 +26,7 @@ const state = {
 
 function initTilePool() {
   state.tilePool = [];
-  for (const [letter, count] of Object.entries(TILE_BAG)) {
+  for (const [letter, count] of Object.entries(TILE_BAG)) {  
     for (let i = 0; i < count; i++) {
       const tileObj = createTile(letter);
       tileObj.basePoints = tileObj.points;

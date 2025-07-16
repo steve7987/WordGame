@@ -321,8 +321,11 @@ function getWordScore(wordTiles, rule) {
 }
 
 function isValidWord(word, rule) {
-  return word.length >= rule.minLength && word.length <= rule.maxLength;
+  const lowerWord = word.toLowerCase();
+  const lengthValid = lowerWord.length >= rule.minLength && lowerWord.length <= rule.maxLength;
+  return lengthValid && VALID_WORDS.has(lowerWord);
 }
+
 
 function shuffleGrid() {
   const tileElements = Array.from(document.querySelectorAll('.tile'));
