@@ -46,7 +46,6 @@ button {
   </style>
 </head>
 <body>
-  <h2>4x4 Word Grid</h2>
   <div id="grid"></div>
 
   <div id="inputRack"></div>
@@ -61,5 +60,6 @@ button {
   <p id="result"></p>
   <p id="lastWord"></p>
   <script type="module" src="game.js"></script>
+  <input id="mobileKeyboardInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 </body>
 </html>
