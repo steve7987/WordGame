@@ -232,7 +232,7 @@ button {
   #grid {
     grid-template-columns: repeat(4, 11vw);
     grid-template-rows: repeat(4, 11vw);
-    gap: 3vw;
+    gap: 2vw;
   }
 
   .tile,
@@ -263,8 +263,8 @@ button {
 
   #inputRack,
   #inputRack1 {
-    gap: 1vw;
-    min-height: 11vw;
+    gap: 0.5vw;
+    min-height: 10vw;
   }
 }
 #mobileKeyboardInput {

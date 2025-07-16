@@ -230,15 +230,15 @@ button {
 /* 📱 Mobile styles */
 @media (max-width: 768px) {
   #grid {
-    grid-template-columns: repeat(4, 11vw);
-    grid-template-rows: repeat(4, 11vw);
-    gap: 3vw;
+    grid-template-columns: repeat(4, 10vw);
+    grid-template-rows: repeat(4, 10vw);
+    gap: 2vw;
   }
 
   .tile,
   .input-tile {
-    width: 11vw;
-    height: 11vw;
+    width: 10vw;
+    height: 10vw;
     font-size: 6vw;
   }
 

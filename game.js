@@ -16,7 +16,7 @@ const state = {
   usedTiles: [],
   nextId: 0,
   totalScore: 0,
-  playsRemaining: 10,
+  playsRemaining: 8,
   currentLevel: 1,
   nextLevelThreshold: 60,
   lastWord: '',
@@ -220,7 +220,7 @@ async function submitWord() {
 
   if (state.totalScore >= state.nextLevelThreshold) {
     state.currentLevel++;
-    state.playsRemaining += 5;
+    state.playsRemaining += 4;
 	state.totalScore = 0;
     const nextThreshold = Math.ceil(state.nextLevelThreshold * 1.2 / 20) * 20;
     state.nextLevelThreshold = nextThreshold;

@@ -16,12 +16,12 @@ const state = {
   usedTiles: [],
   nextId: 0,
   totalScore: 0,
-  playsRemaining: 10,
+  playsRemaining: 8,
   currentLevel: 1,
   nextLevelThreshold: 60,
   lastWord: '',
   lastScore: null,
-  gameOver: false
+  gameOver: false,
   bestWord: '',
   bestWordScore: 0
 };
