@@ -1,0 +1,57 @@
+export function setupInputHandlers(state, render, submitCallback, addTileToInput, removeLastTile) {
+  document.addEventListener('keydown', (e) => {
+    const key = e.key.toUpperCase();
+    const rack = state.inputRacks[state.activeRackIndex];
+    const fixedCount = Object.keys(rack.rule.fixedLetters || {}).length;
+    const maxLetters = rack.rule.maxLength - fixedCount;
+
+    if (/^[A-Z]$/.test(key)) {
+      if (rack.selectedTileIds.length >= maxLetters) {
+        return; // Already at max, do nothing
+      }
+
+      const available = state.gridTiles.filter(
+        t => t && !getAllSelectedIds().includes(t.id)
+      );
+      const match = available.find(t => t.letter === key);
+      if (match) {
+        rack.selectedTileIds.push(match.id);
+        render();
+      }
+    } else if (e.key === 'Backspace') {
+      removeLastTile();
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (submitCallback) {
+        submitCallback();
+      }
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      state.activeRackIndex = (state.activeRackIndex + 1) % state.inputRacks.length;
+      render();
+    }
+  });
+
+  document.getElementById('grid').addEventListener('click', (e) => {
+    const tileDiv = e.target.closest('.tile');
+    if (!tileDiv || !tileDiv.dataset.id) return;
+
+    const tileId = parseInt(tileDiv.dataset.id, 10);
+    const tile = state.gridTiles.find(t => t && t.id === tileId);
+
+    if (!tile || getAllSelectedIds().includes(tileId)) return;
+
+    const rack = state.inputRacks[state.activeRackIndex];
+    const fixedCount = Object.keys(rack.rule.fixedLetters || {}).length;
+    const maxLetters = rack.rule.maxLength - fixedCount;
+
+    if (rack.selectedTileIds.length >= maxLetters) return;
+
+    rack.selectedTileIds.push(tileId);
+    render();
+  });
+
+  function getAllSelectedIds() {
+    return [...state.inputRacks[0].selectedTileIds, ...state.inputRacks[1].selectedTileIds];
+  }
+}
