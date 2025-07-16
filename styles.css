@@ -263,8 +263,8 @@ button {
 
   #inputRack,
   #inputRack1 {
-    gap: 1vw;
-    min-height: 11vw;
+    gap: 0.5vw;
+    min-height: 10vw;
   }
 }
 #mobileKeyboardInput {
