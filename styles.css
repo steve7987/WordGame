@@ -1,6 +1,7 @@
 body {
   font-family: sans-serif;
   padding: 20px;
+  margin: 0;
 }
 
 #grid {
@@ -9,6 +10,7 @@ body {
   grid-template-rows: repeat(4, 60px);
   gap: 10px;
   margin-bottom: 20px;
+  justify-content: center;
 }
 
 .tile {
@@ -23,11 +25,8 @@ body {
   height: 60px;
   width: 60px;
   visibility: visible;
-
-  /* 🔄 Added to support shuffle animations */
   transition: background-color 0.2s, border-color 0.2s, transform 0.2s ease;
 }
-
 
 .tile-letter {
   font-size: 24px;
@@ -46,18 +45,14 @@ body {
   border-color: #f90;
 }
 
-#inputRack {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-  min-height: 60px;
-}
-
+#inputRack,
 #inputRack1 {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
   min-height: 60px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .input-tile {
@@ -76,7 +71,7 @@ body {
 button {
   font-size: 16px;
   padding: 5px 10px;
-  margin-right: 10px;
+  margin: 5px;
 }
 
 @keyframes fadeOutMoveUp {
@@ -108,6 +103,7 @@ button {
 .tile.new {
   animation: fadeInMoveDown 0.4s forwards;
 }
+
 @keyframes shuffleWiggle {
   0%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(5deg); }
@@ -119,6 +115,7 @@ button {
   transition: transform 0.3s ease;
   will-change: transform;
 }
+
 .input-tile.optional {
   border-style: dashed;
 }
@@ -126,6 +123,7 @@ button {
 .input-tile:empty {
   background: #f0f0f0;
 }
+
 .input-tile.fixed {
   background: #ccc;
   border-color: #666;
@@ -133,6 +131,7 @@ button {
   font-style: italic;
   pointer-events: none;
 }
+
 .tile-modifier {
   position: absolute;
   bottom: 2px;
@@ -142,9 +141,11 @@ button {
   font-weight: bold;
   pointer-events: none;
 }
+
 .input-tile.filled {
-  background: #f1e7d7; /* soft parchment/beige */
+  background: #f1e7d7;
 }
+
 .tile.boosted {
   animation: wiggle 0.5s ease-in-out;
 }
@@ -185,19 +186,29 @@ button {
     opacity: 0;
   }
 }
+
 .points-buffed {
   color: green;
   font-size: 14px;
   font-weight: bold;
 }
-.input-tile.rack-a { background-color: #d0eaff; }
-.input-tile.rack-b { background-color: #ffe7cc; }
-.input-tile.inactive { opacity: 0.6; }
+
+.input-tile.rack-a {
+  background-color: #d0eaff;
+}
+
+.input-tile.rack-b {
+  background-color: #ffe7cc;
+}
+
+.input-tile.inactive {
+  opacity: 0.6;
+}
 
 /* Rack 0 */
 .tile.rack-0.rack-active {
   border: 2px solid #4db8ff;
-  background-color: rgba(77, 184, 255, 0.2); /* light blue fill */
+  background-color: rgba(77, 184, 255, 0.2);
 }
 
 .tile.rack-0.rack-inactive {
@@ -208,10 +219,57 @@ button {
 /* Rack 1 */
 .tile.rack-1.rack-active {
   border: 2px solid #ffa640;
-  background-color: rgba(255, 166, 64, 0.2); /* light orange fill */
+  background-color: rgba(255, 166, 64, 0.2);
 }
 
 .tile.rack-1.rack-inactive {
   border: 2px solid #ffa640;
   opacity: 0.5;
+}
+
+/* 📱 Mobile styles */
+@media (max-width: 768px) {
+  #grid {
+    grid-template-columns: repeat(4, 11vw);
+    grid-template-rows: repeat(4, 11vw);
+    gap: 3vw;
+  }
+
+  .tile,
+  .input-tile {
+    width: 11vw;
+    height: 11vw;
+    font-size: 6vw;
+  }
+
+  .tile-letter {
+    font-size: 6vw;
+  }
+
+  .tile-points,
+  .tile-modifier {
+    font-size: 2.8vw;
+  }
+
+  button {
+    font-size: 4vw;
+    padding: 1vw 2vw;
+  }
+
+  .tile-popup {
+    font-size: 4vw;
+    padding: 0.5vw 1vw;
+  }
+
+  #inputRack,
+  #inputRack1 {
+    gap: 1vw;
+    min-height: 11vw;
+  }
+}
+#mobileKeyboardInput {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none;
 }

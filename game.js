@@ -21,7 +21,9 @@ const state = {
   nextLevelThreshold: 60,
   lastWord: '',
   lastScore: null,
-  gameOver: false
+  gameOver: false,
+  bestWord: '',
+  bestWordScore: 0
 };
 
 function initTilePool() {
@@ -111,17 +113,23 @@ function renderAll(playedIds = [], newIds = []) {
 
   const resultEl = document.getElementById('result');
   if (state.gameOver) {
-    resultEl.textContent = `Game Over! You achieved level ${state.currentLevel}`;
+    resultEl.textContent = `Game Over! You achieved level ${state.currentLevel} `;
+	if (state.bestWord)
+  {
+	  const wordEl = document.getElementById('lastWord');
+	  wordEl.textContent =  `Best word: "${state.bestWord}" (${state.bestWordScore ?? 'invalid'})`;
+  }
   } else {
     const nextNeeded = state.nextLevelThreshold;
     //const last = state.lastWord ? ` | Last: "${state.lastWord}" (${state.lastScore ?? 'invalid'})` : '';
     resultEl.textContent = `Score: ${state.totalScore} / ${nextNeeded}  | Level: ${state.currentLevel} | Plays Left: ${state.playsRemaining}`;
+		if (state.lastWord)
+	  {
+		  const wordEl = document.getElementById('lastWord');
+		  wordEl.textContent =  `Last: "${state.lastWord}" (${state.lastScore ?? 'invalid'})`;
+	  }
 	}
-	 if (state.lastWord)
-  {
-	  const wordEl = document.getElementById('lastWord');
-	  wordEl.textContent =  `Last: "${state.lastWord}" (${state.lastScore ?? 'invalid'})`;
-  }
+	 
 	
 }
 
@@ -203,6 +211,12 @@ async function submitWord() {
   const score = getWordScore(wordTiles, rack.rule);
   state.lastScore = score;
   state.totalScore += score;
+
+  if (score > state.bestWordScore)
+  {
+	  state.bestWordScore = score;
+	  state.bestWord = word;
+  }
 
   if (state.totalScore >= state.nextLevelThreshold) {
     state.currentLevel++;

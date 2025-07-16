@@ -1,4 +1,17 @@
 export function setupInputHandlers(state, render, submitCallback, addTileToInput, removeLastTile) {
+  const mobileInput = document.getElementById('mobileKeyboardInput');
+
+  function focusMobileInput() {
+    if (mobileInput) {
+      mobileInput.focus();
+    }
+  }
+
+  function getAllSelectedIds() {
+    return [...state.inputRacks[0].selectedTileIds, ...state.inputRacks[1].selectedTileIds];
+  }
+
+  // Desktop and synthetic key handling
   document.addEventListener('keydown', (e) => {
     const key = e.key.toUpperCase();
     const rack = state.inputRacks[state.activeRackIndex];
@@ -6,9 +19,7 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
     const maxLetters = rack.rule.maxLength - fixedCount;
 
     if (/^[A-Z]$/.test(key)) {
-      if (rack.selectedTileIds.length >= maxLetters) {
-        return; // Already at max, do nothing
-      }
+      if (rack.selectedTileIds.length >= maxLetters) return;
 
       const available = state.gridTiles.filter(
         t => t && !getAllSelectedIds().includes(t.id)
@@ -20,12 +31,9 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
       }
     } else if (e.key === 'Backspace') {
       removeLastTile();
-	  console.log('remove');
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      if (submitCallback) {
-        submitCallback();
-      }
+      if (submitCallback) submitCallback();
     } else if (e.key === 'Tab') {
       e.preventDefault();
       state.activeRackIndex = (state.activeRackIndex + 1) % state.inputRacks.length;
@@ -33,26 +41,55 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
     }
   });
 
+  const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+
+if (mobileInput && isMobile) {
+  mobileInput.addEventListener('input', (e) => {
+    const value = e.target.value.toUpperCase();
+    if (!value) return;
+
+    const char = value.charAt(value.length - 1);
+    e.target.value = ''; // Clear input for next key
+
+    const event = new KeyboardEvent('keydown', { key: char });
+    document.dispatchEvent(event);
+  });
+}
+
+
+  // Grid click handler
   document.getElementById('grid').addEventListener('click', (e) => {
     const tileDiv = e.target.closest('.tile');
     if (!tileDiv || !tileDiv.dataset.id) return;
 
     const tileId = parseInt(tileDiv.dataset.id, 10);
     const tile = state.gridTiles.find(t => t && t.id === tileId);
-
     if (!tile || getAllSelectedIds().includes(tileId)) return;
 
     const rack = state.inputRacks[state.activeRackIndex];
     const fixedCount = Object.keys(rack.rule.fixedLetters || {}).length;
     const maxLetters = rack.rule.maxLength - fixedCount;
-
     if (rack.selectedTileIds.length >= maxLetters) return;
 
     rack.selectedTileIds.push(tileId);
     render();
   });
 
-  function getAllSelectedIds() {
-    return [...state.inputRacks[0].selectedTileIds, ...state.inputRacks[1].selectedTileIds];
-  }
+  // Rack click handler to switch active rack
+  document.querySelectorAll('.rack').forEach((rackEl, i) => {
+    rackEl.addEventListener('click', () => {
+      state.activeRackIndex = i;
+      render();
+    });
+  });
+
+  // Refocus input on all clicks
+  document.body.addEventListener('click', () => {
+    focusMobileInput();
+  });
+
+  // Initial focus
+  window.addEventListener('load', () => {
+    focusMobileInput();
+  });
 }
