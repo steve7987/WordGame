@@ -7,7 +7,7 @@ export default class InputRule {
     // Pick a fixed letter in one of the first 4 slots using TILE_BAG weights
     this.fixedLetters = {};
     let fixedPos = this._randomInt(0, 3);
-    if (Math.random() < Math.min(0.6, 0.2 + 0.05 * level)) {
+    if (Math.random() < Math.min(0.32, 0.2 + 0.02 * level)) {
       const weightedLetters = Object.entries(TILE_BAG).flatMap(
         ([letter, count]) => Array(count).fill(letter)
       );

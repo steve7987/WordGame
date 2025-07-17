@@ -1,4 +1,19 @@
 export function setupInputHandlers(state, render, submitCallback, addTileToInput, removeLastTile) {
+  // Create and insert the hidden mobile input field
+  const hiddenInput = document.createElement('input');
+  hiddenInput.type = 'text';
+  hiddenInput.id = 'mobileKeyboardInput';
+  hiddenInput.autocomplete = 'off';
+  hiddenInput.autocorrect = 'off';
+  hiddenInput.autocapitalize = 'off';
+  hiddenInput.spellcheck = false;
+  hiddenInput.style.position = 'absolute';
+  hiddenInput.style.left = '-9999px';
+  hiddenInput.style.opacity = '0';
+  hiddenInput.style.pointerEvents = 'none';
+  document.body.appendChild(hiddenInput);
+
+  // Keyboard input handling
   document.addEventListener('keydown', (e) => {
     const key = e.key.toUpperCase();
     const rack = state.inputRacks[state.activeRackIndex];
@@ -7,7 +22,7 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
 
     if (/^[A-Z]$/.test(key)) {
       if (rack.selectedTileIds.length >= maxLetters) {
-        return; // Already at max, do nothing
+        return; // Already at max
       }
 
       const available = state.gridTiles.filter(
@@ -20,6 +35,7 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
       }
     } else if (e.key === 'Backspace') {
       removeLastTile();
+      render();
     } else if (e.key === 'Enter') {
       e.preventDefault();
       if (submitCallback) {
@@ -32,6 +48,7 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
     }
   });
 
+  // Tile click handler
   document.getElementById('grid').addEventListener('click', (e) => {
     const tileDiv = e.target.closest('.tile');
     if (!tileDiv || !tileDiv.dataset.id) return;
@@ -51,7 +68,7 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
     render();
   });
 
-  // Add click handlers for switching input racks on tap/click
+  // Rack click handlers
   const rack0 = document.getElementById('inputRack');
   const rack1 = document.getElementById('inputRack1');
 
@@ -70,6 +87,15 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
         state.activeRackIndex = 1;
         render();
       }
+    });
+  }
+
+  // Backspace button handler
+  const backspaceButton = document.getElementById('backspaceButton');
+  if (backspaceButton) {
+    backspaceButton.addEventListener('click', () => {
+      removeLastTile();
+      render();
     });
   }
 

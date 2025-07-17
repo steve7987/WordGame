@@ -227,19 +227,73 @@ button {
   opacity: 0.5;
 }
 
-/* 📱 Mobile styles */
+#gridRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  position: relative;
+}
+
+/* These containers match the full height of the grid */
+#leftColumn, #rightColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: calc(4 * 80px + 3 * 10px); /* 4 tiles tall + 3 gaps of 10px */
+}
+
+/* Spacer to push the button to the bottom */
+.spacer {
+  flex: 1;
+}
+
+.square-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  font-size: 2rem;
+  font-weight: bold;
+  background-color: #fff;
+  border: 3px solid #888;
+  border-radius: 10px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  user-select: none;
+  padding: 0;
+}
+
+
+.square-button:hover {
+  background-color: #f0f0f0;
+}
+
+.square-button:active {
+  transform: scale(0.98);
+}
+
+/* 📱 Mobile layout */
 @media (max-width: 768px) {
   #grid {
-    grid-template-columns: repeat(4, 11vw);
-    grid-template-rows: repeat(4, 11vw);
+    grid-template-columns: repeat(4, 10vw);
+    grid-template-rows: repeat(4, 10vw);
     gap: 2vw;
   }
 
   .tile,
-  .input-tile {
-    width: 11vw;
-    height: 11vw;
-    font-size: 6vw;
+  .input-tile
+  {
+    width: 10vw;
+    height: 10vw;
+    font-size: 7vw;
+  }
+  .square-button {
+    width: 10vw;
+    height: 10vw;
+    font-size: 7vw;
   }
 
   .tile-letter {
@@ -249,6 +303,12 @@ button {
   .tile-points,
   .tile-modifier {
     font-size: 2.8vw;
+  }
+
+  #inputRack,
+  #inputRack1 {
+    gap: 0.5vw;
+    min-height: 10vw;
   }
 
   button {
@@ -261,15 +321,31 @@ button {
     padding: 0.5vw 1vw;
   }
 
-  #inputRack,
-  #inputRack1 {
-    gap: 0.5vw;
-    min-height: 10vw;
+  #leftColumn,
+  #rightColumn {
+    gap: 2vw;
   }
 }
-#mobileKeyboardInput {
-  position: absolute;
-  left: -9999px;
-  opacity: 0;
-  pointer-events: none;
+#leftColumn,
+#rightColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%; /* Allow the columns to match the grid's height */
+}
+
+#gridRow {
+  align-items: flex-end;
+  height: calc(3 * 80px + 3 * 10px); /* 4 tiles + 3 gaps of 10px */
+}
+
+@media (max-width: 768px) {
+  #gridRow {
+    height: calc(4 * 10vw + 3 * 2vw); /* 4 tiles + 3 gaps of 2vw */
+  }
+
+  #leftColumn,
+  #rightColumn {
+    height: 100%;
+  }
 }

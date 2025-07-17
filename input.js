@@ -13,15 +13,7 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
   hiddenInput.style.pointerEvents = 'none';
   document.body.appendChild(hiddenInput);
 
-  // Keep the hidden input focused to ensure mobile keyboard stays up
-  function focusHiddenInput() {
-    hiddenInput.focus();
-  }
-
-  // Focus input on load and after any interaction
-  window.addEventListener('load', focusHiddenInput);
-  document.body.addEventListener('click', focusHiddenInput);
-
+  // Keyboard input handling
   document.addEventListener('keydown', (e) => {
     const key = e.key.toUpperCase();
     const rack = state.inputRacks[state.activeRackIndex];
@@ -43,6 +35,7 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
       }
     } else if (e.key === 'Backspace') {
       removeLastTile();
+      render();
     } else if (e.key === 'Enter') {
       e.preventDefault();
       if (submitCallback) {
@@ -53,11 +46,9 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
       state.activeRackIndex = (state.activeRackIndex + 1) % state.inputRacks.length;
       render();
     }
-
-    // Re-focus after each input to maintain keyboard on mobile
-    focusHiddenInput();
   });
 
+  // Tile click handler
   document.getElementById('grid').addEventListener('click', (e) => {
     const tileDiv = e.target.closest('.tile');
     if (!tileDiv || !tileDiv.dataset.id) return;
@@ -75,9 +66,9 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
 
     rack.selectedTileIds.push(tileId);
     render();
-    focusHiddenInput();
   });
 
+  // Rack click handlers
   const rack0 = document.getElementById('inputRack');
   const rack1 = document.getElementById('inputRack1');
 
@@ -86,7 +77,6 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
       if (state.activeRackIndex !== 0) {
         state.activeRackIndex = 0;
         render();
-        focusHiddenInput();
       }
     });
   }
@@ -96,8 +86,16 @@ export function setupInputHandlers(state, render, submitCallback, addTileToInput
       if (state.activeRackIndex !== 1) {
         state.activeRackIndex = 1;
         render();
-        focusHiddenInput();
       }
+    });
+  }
+
+  // Backspace button handler
+  const backspaceButton = document.getElementById('backspaceBtn');
+  if (backspaceButton) {
+    backspaceButton.addEventListener('click', () => {
+      removeLastTile();
+      render();
     });
   }
 
