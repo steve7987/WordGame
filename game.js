@@ -1,4 +1,4 @@
-import { TILE_BAG, createTile, GRID_SIZE } from './data.js';
+import { TILE_BAG, createTile, GRID_SIZE,  LEVEL_TITLES} from './data.js';
 import { renderGrid, renderInputRack, initGrid } from './ui.js';
 import { setupInputHandlers } from './input.js';
 import InputRule from './InputRule.js';
@@ -111,6 +111,10 @@ function renderAll(playedIds = [], newIds = []) {
     }
   });
 
+  const titleEl = document.getElementById('mainTitle');
+  const curTitle = LEVEL_TITLES.length > state.currentLevel ? LEVEL_TITLES[state.currentLevel - 1] : LEVEL_TITLES[LEVEL_TITLES.length - 1];
+  titleEl.textContent = `Level ${state.currentLevel} : ${curTitle}`  ;
+    
   const resultEl = document.getElementById('result');
   if (state.gameOver) {
     resultEl.textContent = `Game Over! You achieved level ${state.currentLevel} `;
@@ -122,15 +126,13 @@ function renderAll(playedIds = [], newIds = []) {
   } else {
     const nextNeeded = state.nextLevelThreshold;
     //const last = state.lastWord ? ` | Last: "${state.lastWord}" (${state.lastScore ?? 'invalid'})` : '';
-    resultEl.textContent = `Score: ${state.totalScore} / ${nextNeeded}  | Level: ${state.currentLevel} | Plays Left: ${state.playsRemaining}`;
+    resultEl.textContent = `Score: ${state.totalScore} / ${nextNeeded} | Plays Left: ${state.playsRemaining}`;
 		if (state.lastWord)
 	  {
 		  const wordEl = document.getElementById('lastWord');
 		  wordEl.textContent =  `Last: "${state.lastWord}" (${state.lastScore ?? 'invalid'})`;
 	  }
-	}
-	 
-	
+	}	
 }
 
 function refreshRack(index) {
@@ -218,13 +220,22 @@ async function submitWord() {
 	  state.bestWord = word;
   }
 
-  if (state.totalScore >= state.nextLevelThreshold) {
+    if (state.totalScore >= state.nextLevelThreshold) {
     state.currentLevel++;
     state.playsRemaining += 4;
-	state.totalScore = 0;
+    state.totalScore = 0;
     const nextThreshold = Math.ceil(state.nextLevelThreshold * 1.2 / 20) * 20;
     state.nextLevelThreshold = nextThreshold;
+
+    // 🎉 Animate the main title
+    const titleEl = document.getElementById('mainTitle');
+    if (titleEl) {
+      titleEl.classList.remove('level-up-animate'); // reset if already animating
+      void titleEl.offsetWidth; // force reflow to restart animation
+      titleEl.classList.add('level-up-animate');
+    }
   }
+
   
   state.playsRemaining--;
   if (state.playsRemaining < 0) {

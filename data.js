@@ -21,3 +21,20 @@ export function createTile(letter) {
 }
 
 export const GRID_SIZE = 4;
+
+export const LEVEL_TITLES = [
+  "Novice Letterwright",
+  "Expert Letterwright",
+  "Developing Wordsmith",
+  "Crafty Wordsmith",
+  "Spelling Major",
+  "Linguistics Student",
+  "Junior Etymologist",
+  "Senior Etymologist",
+  "Advanced Linguistics Analyst",
+  "Lexicography Fellow (Sr)",
+  "Distinguished Linguist",
+  "Webster Fellow",
+  "Distinguished Webster Fellow",
+  "Grand Master of the Bee"
+];

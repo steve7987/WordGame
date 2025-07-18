@@ -23,7 +23,7 @@ export default class InputRule {
     this.scoreModifiers = {};
 
     const modifierPositions = new Set();
-	const numModifiers = 2 + Math.floor(level / 8) + (Math.random() < (level % 8) / 8 ? 1 : 0);
+	  const numModifiers = 2 + 2 * Math.floor(level / 8) + (Math.random() < (level % 8) / 8 ? 1 : 0) + (Math.random() < (level % 8) / 8 ? 1 : 0);
     while (modifierPositions.size < Math.min(numModifiers, 6)) {
       const pos = this._randomInt(0, 6);
       if (pos !== fixedPos) modifierPositions.add(pos);
@@ -37,12 +37,12 @@ export default class InputRule {
 
     // Assign one additive modifier
     const posAdd = modArray.pop();
-    const addValue = posAdd * 2 + this._randomInt(2, 6);
+    const addValue = posAdd * 2 + this._randomInt(2, 6) + level;
     this.scoreModifiers[posAdd] = { type: 'add', value: addValue };
 
     // Assign remaining as multipliers
     for (const pos of modArray) {
-      const multValue = this._randomInt(2, 4); // x2 to x4
+      const multValue = this._randomInt(2, 4) + Math.floor(level / 7); // x2 to x4
       this.scoreModifiers[pos] = { type: 'multiplier', value: multValue };
     }
 	

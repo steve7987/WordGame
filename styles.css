@@ -353,3 +353,12 @@ button {
     height: 100%;
   }
 }
+@keyframes levelUpPulse {
+  0% { transform: scale(1); color: #a8d0ff; }   /* soft icy blue */
+  50% { transform: scale(1.3); color: #58c4ff; } /* vibrant cool blue */
+  100% { transform: scale(1); color: inherit; }
+}
+
+.level-up-animate {
+  animation: levelUpPulse 0.6s ease-in-out;
+}
