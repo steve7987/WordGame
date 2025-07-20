@@ -23,7 +23,8 @@ const state = {
   lastScore: null,
   gameOver: false,
   bestWord: '',
-  bestWordScore: 0
+  bestWordScore: 0,
+  wordHistory: []
 };
 
 function initTilePool() {
@@ -118,20 +119,29 @@ function renderAll(playedIds = [], newIds = []) {
   const resultEl = document.getElementById('result');
   if (state.gameOver) {
     resultEl.textContent = `Game Over! You achieved level ${state.currentLevel} `;
-	if (state.bestWord)
-  {
-	  const wordEl = document.getElementById('lastWord');
-	  wordEl.textContent =  `Best word: "${state.bestWord}" (${state.bestWordScore ?? 'invalid'})`;
-  }
-  } else {
+  	if (state.bestWord)
+    {
+  	  const wordEl = document.getElementById('lastWordDisplay');
+  	  wordEl.textContent =  `Best word: "${state.bestWord}" (${state.bestWordScore ?? 'invalid'})`;
+    }
+  } 
+  else {
     const nextNeeded = state.nextLevelThreshold;
     //const last = state.lastWord ? ` | Last: "${state.lastWord}" (${state.lastScore ?? 'invalid'})` : '';
     resultEl.textContent = `Score: ${state.totalScore} / ${nextNeeded} | Plays Left: ${state.playsRemaining}`;
-		if (state.lastWord)
-	  {
-		  const wordEl = document.getElementById('lastWord');
-		  wordEl.textContent =  `Last: "${state.lastWord}" (${state.lastScore ?? 'invalid'})`;
-	  }
+		
+    if (state.lastWord) {
+      const wordEl = document.getElementById('lastWordDisplay');
+      wordEl.textContent = `Last: "${state.lastWord}" (${state.lastScore ?? 'invalid'})`;
+
+      // Make sure the container is shown
+      document.getElementById('wordHistoryContainer').style.display = 'block';
+    } else {
+      // Hide the entire history display if there's no word yet
+      document.getElementById('wordHistoryContainer').style.display = 'none';
+    }
+
+    
 	}	
 }
 
@@ -186,6 +196,29 @@ function getSubmittedWord(gridTiles, selectedIds, rule) {
   return word.join('');
 }
 
+function toggleWordHistory() {
+  const list = document.getElementById('wordHistoryList');
+  const btn = document.getElementById('toggleHistoryBtn');
+  const isVisible = list.style.display === 'block';
+  list.style.display = isVisible ? 'none' : 'block';
+  btn.textContent = isVisible ? '▼' : '▲';
+}
+
+// Add this to your renderAll or submitWord logic:
+function updateWordHistoryDisplay() {
+  const { wordHistory } = state;
+  const lastWord = wordHistory.length > 0 ? wordHistory[wordHistory.length - 1] : null;
+
+  const listContainer = document.getElementById('wordHistoryList');
+
+  listContainer.innerHTML = wordHistory
+    .slice()
+    .reverse()
+    .map(entry => `<div><span>${entry.word}</span><span>+${entry.score}</span></div>`)
+    .join('');
+}
+
+
 async function submitWord() {
   if (state.gameOver) return;
 
@@ -219,10 +252,13 @@ async function submitWord() {
 	  state.bestWordScore = score;
 	  state.bestWord = word;
   }
+  state.wordHistory.push({ word, score });
+  updateWordHistoryDisplay();
+
 
     if (state.totalScore >= state.nextLevelThreshold) {
     state.currentLevel++;
-    state.playsRemaining += 4;
+    state.playsRemaining += state.currentLevel % 2 == 0 ? 4 : 3;
     state.totalScore = 0;
     const nextThreshold = Math.ceil(state.nextLevelThreshold * 1.2 / 20) * 20;
     state.nextLevelThreshold = nextThreshold;
@@ -249,7 +285,7 @@ async function submitWord() {
   const unplayedTiles = state.gridTiles.filter(t => t && !playedIds.includes(t.id));
 
   const numBonuses = 1 + Math.floor(state.currentLevel / 8) + (Math.random() < (state.currentLevel % 8) / 8 ? 1 : 0);
-  console.log(numBonuses);
+  //console.log(numBonuses);
   const bonusTileIds = [];
   for (let i = 0; i < numBonuses && unplayedTiles.length > 0; i++) {
     const idx = Math.floor(Math.random() * unplayedTiles.length);
@@ -413,6 +449,7 @@ function removeLastTile() {
 document.getElementById('shuffleBtn').onclick = shuffleGrid;
 document.getElementById('submitBtn').onclick = submitWord;
 document.getElementById('clearBtn').onclick = clearInput;
+document.getElementById('toggleHistoryBtn').onclick = toggleWordHistory;
 
 let VALID_WORDS = new Set();
 

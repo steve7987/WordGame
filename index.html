@@ -67,9 +67,47 @@
       top: -100px;
       opacity: 0;
     }
+    #wordHistoryContainer {
+  margin-top: 10px;
+  max-width: 400px;
+  width: 100%;
+  text-align: left;
+}
+
+#wordHistoryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: #e0f0ff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #333;
+}
+
+#wordHistoryList {
+  background: #f0f8ff;
+  border-radius: 6px;
+  margin-top: 5px;
+  padding: 10px;
+  font-size: 0.95rem;
+}
+
+#wordHistoryList div {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+#wordHistoryList div:last-child {
+  border-bottom: none;
+}
+
   </style>
 </head>
-<h2 id = "mainTitle">Level 1: Apprentice Letterwright</h2>
+<h2 id = "mainTitle">Level 1 : Novice Letterwright</h2>
 <body>
   <div id="gridRow">
 	  <div id="leftColumn">
@@ -97,9 +135,16 @@
   </div>
 
   <p id="result"></p>
-  <p id="lastWord"></p>
+  <div id="wordHistoryContainer">
+    <div id="wordHistoryHeader">
+      <span id="lastWordDisplay"></span>
+      <button id="toggleHistoryBtn">▼</button>
+    </div>
+    <div id="wordHistoryList" style="display: none;"></div>
+  </div>
 
-  <b>Instructions</b>
+
+  <b><br>Instructions</b>
   <p id="instruct">Enter words to either row to gain points. <br>Use words of any length.<br> Level up for more plays and bonuses.<br> Don't run out of plays.</p>
 
   <script type="module" src="game.js"></script>
