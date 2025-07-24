@@ -42,7 +42,7 @@ export default class InputRule {
 
     // Assign remaining as multipliers
     for (const pos of modArray) {
-      const multValue = this._randomInt(2, 4) + Math.floor(level / 7); // x2 to x4
+      const multValue = Math.round((this._randomInt(2, 4) + Math.floor(level / 7)) * (pos > 4 ? pos / 4 : 1)); // x2 to x4
       this.scoreModifiers[pos] = { type: 'multiplier', value: multValue };
     }
 	

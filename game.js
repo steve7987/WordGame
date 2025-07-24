@@ -256,11 +256,11 @@ async function submitWord() {
   updateWordHistoryDisplay();
 
 
-    if (state.totalScore >= state.nextLevelThreshold) {
+  if (state.totalScore >= state.nextLevelThreshold) {
     state.currentLevel++;
     state.playsRemaining += state.currentLevel % 2 == 0 ? 4 : 3;
     state.totalScore = 0;
-    const nextThreshold = Math.ceil(state.nextLevelThreshold * 1.2 / 20) * 20;
+    const nextThreshold = Math.ceil(state.nextLevelThreshold * 1.3 / 20) * 20;
     state.nextLevelThreshold = nextThreshold;
 
     // 🎉 Animate the main title
